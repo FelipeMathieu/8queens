@@ -13,14 +13,15 @@ namespace _8queens
     public partial class Result : Form
     {
         private PictureBox[,] tabuleiro = new PictureBox[8, 8];
+        private bool[,] results = new bool[8, 8];
         private SemaphoreSlim mutexParallel = new SemaphoreSlim(0);
 
-        public Result()
+        public Result(bool[,] results)
         {
             InitializeComponent();
+            this.results = results;
             this.loadTab();
-            this.changeCordenateColor(Color.Black, 6, 6);
-            this.changeCordenateColor(Color.Green, 0, 0);
+            this.printTab();
         }
 
         private void loadTab()
@@ -111,6 +112,20 @@ namespace _8queens
         private void changeCordenateColor(Color color, int x, int y)
         {
             this.tabuleiro[x, y].BackColor = color;
+        }
+
+        private void printTab()
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if(this.results[i, j])
+                    {
+                        this.changeCordenateColor(Color.Black, i, j);
+                    }
+                }
+            }
         }
     }
 }

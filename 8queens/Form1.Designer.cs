@@ -36,6 +36,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.listBox4 = new System.Windows.Forms.ListBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -44,7 +46,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(12, 338);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(574, 23);
+            this.button1.Size = new System.Drawing.Size(770, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Gerar Resultados";
             this.button1.UseVisualStyleBackColor = true;
@@ -68,6 +70,7 @@
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(191, 303);
             this.listBox2.TabIndex = 2;
+            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // listBox3
             // 
@@ -77,6 +80,7 @@
             this.listBox3.Name = "listBox3";
             this.listBox3.Size = new System.Drawing.Size(180, 303);
             this.listBox3.TabIndex = 3;
+            this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
             // button2
             // 
@@ -84,16 +88,17 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(12, 367);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(574, 23);
+            this.button2.Size = new System.Drawing.Size(770, 23);
             this.button2.TabIndex = 4;
             this.button2.Text = "Gráfico de SpeedUp";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
+            this.label1.Location = new System.Drawing.Point(9, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(148, 13);
             this.label1.TabIndex = 5;
@@ -115,15 +120,37 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(403, 13);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(176, 13);
+            this.label3.Size = new System.Drawing.Size(142, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Resultados para oito processadores";
+            this.label3.Text = "Resultados para oito threads";
+            // 
+            // listBox4
+            // 
+            this.listBox4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.listBox4.FormattingEnabled = true;
+            this.listBox4.Location = new System.Drawing.Point(591, 29);
+            this.listBox4.Name = "listBox4";
+            this.listBox4.Size = new System.Drawing.Size(191, 303);
+            this.listBox4.TabIndex = 8;
+            this.listBox4.SelectedIndexChanged += new System.EventHandler(this.listBox4_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(588, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(111, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Resultados para serial";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 395);
+            this.ClientSize = new System.Drawing.Size(794, 395);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.listBox4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -149,6 +176,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox listBox4;
+        private System.Windows.Forms.Label label4;
     }
 }
 

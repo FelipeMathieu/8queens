@@ -1,0 +1,12 @@
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\bin\Debug\8queens.exe.config
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\bin\Debug\8queens.exe
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\bin\Debug\8queens.pdb
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\8queens.csprojResolveAssemblyReference.cache
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\_8queens.Form1.resources
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\_8queens.Properties.Resources.resources
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\_8queens.Result.resources
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\8queens.csproj.GenerateResource.Cache
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\8queens.csproj.CoreCompileInputs.cache
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\8queens.exe
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\8queens.pdb
+C:\Users\mathi\OneDrive\Documentos\Visual Studio 2017\Projects\8queens\8queens\obj\Debug\_8queens.SpeedUp.resources
