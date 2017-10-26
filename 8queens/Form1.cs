@@ -12,46 +12,102 @@ namespace _8queens
 {
     public partial class Form1 : Form
     {
-        private List<Pair<string, bool[,]>> resultsList1 = new List<Pair<string, bool[,]>>();
-        private List<Pair<string, bool[,]>> resultsList2 = new List<Pair<string, bool[,]>>();
-        private List<Pair<string, bool[,]>> resultsList3 = new List<Pair<string, bool[,]>>();
-        private List<Pair<string, bool[,]>> resultsList4 = new List<Pair<string, bool[,]>>();
+        private List<Pair<string, bool[,]>> resultList1 = new List<Pair<string, bool[,]>>();
+        private List<Pair<string, bool[,]>> resultList2 = new List<Pair<string, bool[,]>>();
+        private List<Pair<string, bool[,]>> resultList3 = new List<Pair<string, bool[,]>>();
+        private List<Pair<string, bool[,]>> resultList4 = new List<Pair<string, bool[,]>>();
 
-        private double[] times = new double[4];
+        private double[] times = new double[3];
+        //private bool[,] resultados = new bool[8, 8];
+        private int size = 8;
+        private int solutions = 0;
+        private int iteracoes = 0;
+
+        private SemaphoreSlim mutex;
+        private SemaphoreSlim normal;
+        private SemaphoreSlim barreira;
+        private SemaphoreSlim mutexBarreira;
+        private SemaphoreSlim fimIteracoes;
+
+        private string textLabel1 = "";
+        private string textLabel2 = "";
+        private string textLabel3 = "";
+        private string textLabel4 = "";
 
         public Form1()
         {
             InitializeComponent();
+            this.textLabel1 = this.label1.Text.ToString();
+            this.textLabel2 = this.label2.Text.ToString();
+            this.textLabel3 = this.label3.Text.ToString();
+            this.textLabel4 = this.label4.Text.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SemaphoreSlim m = new SemaphoreSlim(1);
+
+            this.mutex = null;
+            this.normal = null;
+            this.barreira = null;
+            this.mutexBarreira = null;
+            this.fimIteracoes = null;
+
             this.listBox1.Items.Clear();
             this.listBox2.Items.Clear();
             this.listBox3.Items.Clear();
             this.listBox4.Items.Clear();
 
-            this.resultsList1.Clear();
-            this.resultsList2.Clear();
-            this.resultsList3.Clear();
-            this.resultsList4.Clear();
+            this.resultList1.Clear();
+            this.resultList2.Clear();
+            this.resultList3.Clear();
+            this.resultList4.Clear();
 
-            this.listBox1.Items.Add(1);
-            this.listBox2.Items.Add(1);
-            this.listBox3.Items.Add(1);
-            this.listBox4.Items.Add(1);
+            double t0 = Environment.TickCount;
+            double t1 = 0.0;
 
-            this.execute(0, 7);
-            this.twoThreads();
-            this.fourThreads();
-            this.eightThreads();
+            m.Wait();
+            this.callThreads(1);
+            m.Release();
+            t1 = (double)(Environment.TickCount - t0);
+            this.times[0] = t1 / 1000;
 
-            for (int i = 0; i < this.resultsList1.Count; i++)
+            t0 = Environment.TickCount;
+            m.Wait();
+            this.callThreads(2);
+            m.Release();
+            t1 = (double)(Environment.TickCount - t0);
+            this.times[1] = t1 / 1000;
+
+            t0 = Environment.TickCount;
+            m.Wait();
+            this.callThreads(4);
+            m.Release();
+            t1 = (double)(Environment.TickCount - t0);
+            this.times[2] = t1 / 1000;
+
+            //t0 = Environment.TickCount;
+            //m.Wait();
+            //this.callThreads(8);
+            //m.Release();
+            //this.times[1] = ((double)(Environment.TickCount - t0)) / 1000;
+
+
+            this.label1.Text = this.textLabel1 + ": " + this.resultList1.Count.ToString();
+            this.label2.Text = this.textLabel2 + ": " + this.resultList2.Count.ToString();
+            this.label3.Text = this.textLabel3 + ": " + this.resultList3.Count.ToString();
+            this.label4.Text = this.textLabel4 + ": " + this.resultList4.Count.ToString();
+
+            for (int i = 0; i < this.resultList1.Count; i++)
             {
-                this.listBox1.Items.Add(this.resultsList1[i].first);
-                this.listBox2.Items.Add(this.resultsList2[i].first);
-                this.listBox3.Items.Add(this.resultsList3[i].first);
-                this.listBox4.Items.Add(this.resultsList4[i].first);
+                this.listBox1.Items.Add(this.resultList1[i].first);
+                this.listBox2.Items.Add(this.resultList2[i].first);
+                this.listBox4.Items.Add(this.resultList4[i].first);
+            }
+
+            for (int i = 0; i < this.resultList3.Count; i++)
+            {
+                this.listBox3.Items.Add(this.resultList3[i].first);
             }
         }
 
@@ -99,41 +155,41 @@ namespace _8queens
         {
             if (list == 1)
             {
-                for (int i = 0; i < this.resultsList1.Count; i++)
+                for (int i = 0; i < this.resultList1.Count; i++)
                 {
-                    if (this.resultsList1[i].first == item)
+                    if (this.resultList1[i].first == item)
                     {
-                        return this.resultsList1[i].second;
+                        return this.resultList1[i].second;
                     }
                 }
             }
             else if (list == 2)
             {
-                for (int i = 0; i < this.resultsList2.Count; i++)
+                for (int i = 0; i < this.resultList2.Count; i++)
                 {
-                    if (this.resultsList2[i].first == item)
+                    if (this.resultList2[i].first == item)
                     {
-                        return this.resultsList2[i].second;
+                        return this.resultList2[i].second;
                     }
                 }
             }
             else if (list == 3)
             {
-                for (int i = 0; i < this.resultsList3.Count; i++)
+                for (int i = 0; i < this.resultList3.Count; i++)
                 {
-                    if (this.resultsList3[i].first == item)
+                    if (this.resultList3[i].first == item)
                     {
-                        return this.resultsList3[i].second;
+                        return this.resultList3[i].second;
                     }
                 }
             }
             else if (list == 4)
             {
-                for (int i = 0; i < this.resultsList4.Count; i++)
+                for (int i = 0; i < this.resultList4.Count; i++)
                 {
-                    if (this.resultsList4[i].first == item)
+                    if (this.resultList4[i].first == item)
                     {
-                        return this.resultsList4[i].second;
+                        return this.resultList4[i].second;
                     }
                 }
             }
@@ -143,8 +199,7 @@ namespace _8queens
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (this.listBox1.Items.Count > 0 && this.listBox2.Items.Count > 0 &&
-                this.listBox3.Items.Count > 0 && this.listBox4.Items.Count > 0)
+            if (this.listBox1.Items.Count > 0 && this.listBox2.Items.Count > 0 && this.listBox4.Items.Count > 0)
             {
                 SpeedUp speedUp = new SpeedUp(this.times.ToArray());
                 speedUp.Show();
@@ -155,52 +210,186 @@ namespace _8queens
             }
         }
 
-        private void execute(int inicio, int fim)
+        private bool cheque(int x, int y, bool[,] resultados)
         {
-            
+            return chequeDiagonal(x, y, resultados) || chequeHorizontal_Vertical(x, y, resultados);
         }
 
-        private void twoThreads()
+        private bool chequeDiagonal(int x, int y, bool[,] resultados)
         {
-            Thread thread = new Thread(() => this.execute(0, 3));
-            Thread thread1 = new Thread(() => this.execute(4, 7));
+            /* checar / diagonal */
+            //|        | b[x-i,j+i] |
+            //| b[x,y] |            |
+            for (int i = 1; x - i >= 0 && y + i < size; i++)
+            {
+                if (resultados[x - i, y + i])
+                {
+                    return true;
+                }
+            }
+            /* checar / diagonal */
+            //|            | b[x,y] |
+            //| b[x+i,j-i] |        |
+            for (int i = 1; x + i < size && y - i >= 0; i++)
+            {
+                if (resultados[x + i, y - i])
+                {
+                    return true;
+                }
+            }
+            /* checar \ diagonal */
+            //| b[x-i,y-i] |        |
+            //|            | b[x,y] |
+            for (int i = 1; x - i >= 0 && y - i >= 0; i++)
+            {
+                if (resultados[x - i, y - i])
+                {
+                    return true;
+                }
 
-            thread.Start();
-            thread1.Start();
+            }
+            /* checar \ diagonal */
+            //| b[x,y] |            |
+            //|        | b[x+i,y+i] |
+            for (int i = 1; x + i < size && y + i < size; i++)
+            {
+
+                if (resultados[x + i, y + i])
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
-        private void fourThreads()
+        private bool chequeHorizontal_Vertical(int x, int y, bool[,] resultados)
         {
-            Thread thread = new Thread(() => this.execute(0, 1));
-            Thread thread1 = new Thread(() => this.execute(2, 3));
-            Thread thread2 = new Thread(() => this.execute(4, 5));
-            Thread thread3 = new Thread(() => this.execute(6, 7));
+            /* checar horizontal */
+            for (int i = 0; i < size; i++)
+            {
+                if (i == x) { continue; }
+                else
+                {
+                    if (resultados[i, y]) { return true; }
+                }
+            }
 
-            thread.Start();
-            thread1.Start();
-            thread2.Start();
-            thread3.Start();
+            /* checar vertical */
+            for (int i = 0; i < size; i++)
+            {
+                if (i == y) { continue; }
+                else
+                {
+                    if (resultados[x, i]) { return true; }
+                }
+            }
+
+            return false;
         }
 
-        private void eightThreads()
+        private bool solve(int pos, bool[,] resultados, int numberOfThreads)
         {
-            Thread thread = new Thread(() => this.execute(0, 0));
-            Thread thread1 = new Thread(() => this.execute(1, 1));
-            Thread thread2 = new Thread(() => this.execute(2, 2));
-            Thread thread3 = new Thread(() => this.execute(3, 3));
-            Thread thread4 = new Thread(() => this.execute(4, 4));
-            Thread thread5 = new Thread(() => this.execute(5, 5));
-            Thread thread6 = new Thread(() => this.execute(6, 6));
-            Thread thread7 = new Thread(() => this.execute(7, 7));
+            for (int j = 0; j < this.size; j++)
+            {
+                if (!cheque(pos, j, resultados))
+                {
+                    resultados[pos, j] = true;
+                    if (pos == this.size - 1)
+                    {
 
-            thread.Start();
-            thread1.Start();
-            thread2.Start();
-            thread3.Start();
-            thread4.Start();
-            thread5.Start();
-            thread6.Start();
-            thread7.Start();
+                        this.solutions++;
+                        //achou um resultado !!
+                        if (numberOfThreads == 2)
+                        {
+                            this.mutex.Wait();
+                            this.resultList1.Add(new Pair<string, bool[,]>("Resultado " + (this.resultList1.Count + 1).ToString() +
+                                "  dois cores", (bool[,])resultados.Clone()));
+                            this.mutex.Release();
+                        }
+                        else if (numberOfThreads == 4)
+                        {
+                            this.mutex.Wait();
+                            this.resultList2.Add(new Pair<string, bool[,]>("Resultado " + (this.resultList2.Count + 1).ToString() +
+                                "  quatro cores", (bool[,])resultados.Clone()));
+                            this.mutex.Release();
+                        }
+                        else if (numberOfThreads == 8)
+                        {
+                            this.mutex.Wait();
+                            this.resultList3.Add(new Pair<string, bool[,]>("Resultado " + (this.resultList3.Count + 1).ToString() +
+                                "  oito cores", (bool[,])resultados.Clone()));
+                            this.mutex.Release();
+                        }
+                        else if (numberOfThreads == 1)
+                        {
+                            this.mutex.Wait();
+                            this.resultList4.Add(new Pair<string, bool[,]>("Resultado " + (this.resultList4.Count + 1).ToString() +
+                                "  serial", (bool[,])resultados.Clone()));
+                            this.mutex.Release();
+                        }
+
+
+                        resultados[pos, j] = false;
+                        return true;
+                    }
+                    else
+                    {
+                        solve(pos + 1, resultados, numberOfThreads);
+                        resultados[pos, j] = false; //backtracking
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void acharSolucoes(int comeco, int fim, bool[,] resultados, int number)
+        {
+            for (int col = comeco; col < fim; col++)
+            {
+                resultados[0, col] = true; //primeira rainha inserida
+                solve(1, resultados, number);
+                resultados[0, col] = false;
+            }
+
+            this.fimIteracoes.Wait();
+            this.iteracoes++;
+
+            if (this.iteracoes == number)
+            {
+                this.barreira.Release();
+            }
+
+            this.fimIteracoes.Release();
+            this.normal.Release();
+        }
+
+        private void callThreads(int numberOfThreads)
+        {
+            int comeco = 0;
+            int fim = 0;
+
+            this.normal = new SemaphoreSlim(numberOfThreads);
+            this.barreira = new SemaphoreSlim(0);
+            this.mutex = new SemaphoreSlim(1);
+            this.mutexBarreira = new SemaphoreSlim(1);
+            this.fimIteracoes = new SemaphoreSlim(1);
+
+            int fim1 = this.size / numberOfThreads;
+            fim = fim1;
+
+            for (int i = 0; i < numberOfThreads; i++)
+            {
+                new Thread(() => this.acharSolucoes(comeco, fim, new bool[8, 8], numberOfThreads)).Start();
+                this.normal.Wait();
+                if (fim < this.size)
+                {
+                    comeco = fim;
+                    fim += fim1;
+                }
+            }
+
+            this.barreira.Wait();
         }
     }
 }
