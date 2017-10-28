@@ -21,13 +21,10 @@ namespace _8queens
         //private bool[,] resultados = new bool[8, 8];
         private int size = 8;
         private int solutions = 0;
-        private int iteracoes = 0;
 
-        private SemaphoreSlim mutex;
-        private SemaphoreSlim normal;
-        private SemaphoreSlim barreira;
-        private SemaphoreSlim mutexBarreira;
-        private SemaphoreSlim fimIteracoes;
+        private SemaphoreSlim mutex = new SemaphoreSlim(1, 1);
+        private SemaphoreSlim barreira = new SemaphoreSlim(0);
+        private SemaphoreSlim it = new SemaphoreSlim(1, 1);
 
         private string textLabel1 = "";
         private string textLabel2 = "";
@@ -45,14 +42,6 @@ namespace _8queens
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SemaphoreSlim m = new SemaphoreSlim(1);
-
-            this.mutex = null;
-            this.normal = null;
-            this.barreira = null;
-            this.mutexBarreira = null;
-            this.fimIteracoes = null;
-
             this.listBox1.Items.Clear();
             this.listBox2.Items.Clear();
             this.listBox3.Items.Clear();
@@ -66,31 +55,25 @@ namespace _8queens
             double t0 = Environment.TickCount;
             double t1 = 0.0;
 
-            m.Wait();
+            this.it.Wait();
             this.callThreads(1);
-            m.Release();
+            this.it.Release();
             t1 = (double)(Environment.TickCount - t0);
             this.times[0] = t1 / 1000;
 
             t0 = Environment.TickCount;
-            m.Wait();
+            this.it.Wait();
             this.callThreads(2);
-            m.Release();
+            this.it.Release();
             t1 = (double)(Environment.TickCount - t0);
             this.times[1] = t1 / 1000;
 
             t0 = Environment.TickCount;
-            m.Wait();
+            this.it.Wait();
             this.callThreads(4);
-            m.Release();
+            this.it.Release();
             t1 = (double)(Environment.TickCount - t0);
             this.times[2] = t1 / 1000;
-
-            //t0 = Environment.TickCount;
-            //m.Wait();
-            //this.callThreads(8);
-            //m.Release();
-            //this.times[1] = ((double)(Environment.TickCount - t0)) / 1000;
 
 
             this.label1.Text = this.textLabel1 + ": " + this.resultList1.Count.ToString();
@@ -101,13 +84,21 @@ namespace _8queens
             for (int i = 0; i < this.resultList1.Count; i++)
             {
                 this.listBox1.Items.Add(this.resultList1[i].first);
+            }
+
+            for (int i = 0; i < this.resultList2.Count; i++)
+            {
                 this.listBox2.Items.Add(this.resultList2[i].first);
-                this.listBox4.Items.Add(this.resultList4[i].first);
             }
 
             for (int i = 0; i < this.resultList3.Count; i++)
             {
                 this.listBox3.Items.Add(this.resultList3[i].first);
+            }
+
+            for (int i = 0; i < this.resultList4.Count; i++)
+            {
+                this.listBox4.Items.Add(this.resultList4[i].first);
             }
         }
 
@@ -297,7 +288,6 @@ namespace _8queens
                     resultados[pos, j] = true;
                     if (pos == this.size - 1)
                     {
-
                         this.solutions++;
                         //achou um resultado !!
                         if (numberOfThreads == 2)
@@ -329,7 +319,6 @@ namespace _8queens
                             this.mutex.Release();
                         }
 
-
                         resultados[pos, j] = false;
                         return true;
                     }
@@ -352,16 +341,7 @@ namespace _8queens
                 resultados[0, col] = false;
             }
 
-            this.fimIteracoes.Wait();
-            this.iteracoes++;
-
-            if (this.iteracoes == number)
-            {
-                this.barreira.Release();
-            }
-
-            this.fimIteracoes.Release();
-            this.normal.Release();
+            this.barreira.Release();
         }
 
         private void callThreads(int numberOfThreads)
@@ -369,19 +349,12 @@ namespace _8queens
             int comeco = 0;
             int fim = 0;
 
-            this.normal = new SemaphoreSlim(numberOfThreads);
-            this.barreira = new SemaphoreSlim(0);
-            this.mutex = new SemaphoreSlim(1);
-            this.mutexBarreira = new SemaphoreSlim(1);
-            this.fimIteracoes = new SemaphoreSlim(1);
-
             int fim1 = this.size / numberOfThreads;
             fim = fim1;
 
             for (int i = 0; i < numberOfThreads; i++)
             {
                 new Thread(() => this.acharSolucoes(comeco, fim, new bool[8, 8], numberOfThreads)).Start();
-                this.normal.Wait();
                 if (fim < this.size)
                 {
                     comeco = fim;
@@ -389,7 +362,7 @@ namespace _8queens
                 }
             }
 
-            this.barreira.Wait();
+            this.barreira.Wait(numberOfThreads);
         }
     }
 }
