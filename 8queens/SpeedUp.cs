@@ -38,8 +38,8 @@ namespace _8queens
             this.chart1.Series[0].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             this.chart1.Series[0].MarkerSize = 8;
 
-            this.chart1.ChartAreas[0].AxisX.Minimum = 1;
-            this.chart1.ChartAreas[0].AxisY.Minimum = 1;
+            this.chart1.ChartAreas[0].AxisX.Minimum = 0;
+            this.chart1.ChartAreas[0].AxisY.Minimum = 0;
 
             this.chart1.Series[0].Points.SuspendUpdates();
             for (int i = 0; i < 3; i++)
